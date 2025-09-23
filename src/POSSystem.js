@@ -1,21 +1,29 @@
 import './POSSystem.css';
 import { MdSettings, MdHistory, MdShoppingCart, MdAttachMoney, MdCreditCard, MdSchedule, MdPerson, MdExitToApp, MdEvent, MdAccessTime } from 'react-icons/md';
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { TagIcon } from "@heroicons/react/24/solid";
 import Split from 'react-split';
-
-import { 
-  Search, User, ArrowRightLeft, Tag, Plus, RotateCcw, Calculator, 
-  CreditCard, Menu, X, Hash, Star, Scan, Home, ChevronLeft, 
-  ChevronRight, SkipBack, SkipForward, Lock, LayoutDashboard, 
-  FileText, Package, Archive, BarChart3, Users, Heart, Key, 
-  Globe, Percent, Building, ArrowLeft, Settings, TrendingUp, 
-  Layers, Briefcase, CheckSquare, LogOut, Volume2, RefreshCw, 
-  Clock, FileSpreadsheet, Printer, Save, HelpCircle, Eye, 
-  EyeOff, Check, Bell, MessageSquare, Calendar, Trash2,
+import {
+  Search, User, ArrowRightLeft, Tag, Plus, RotateCcw, Calculator,
+  CreditCard, Menu, X, Hash, Star, Scan, Home, ChevronLeft,
+  ChevronRight, SkipBack, SkipForward, Lock, LayoutDashboard,
+  FileText, Package, Archive, BarChart3, Users, Heart, Key,
+  Globe, Percent, Building, ArrowLeft, Settings, TrendingUp,
+  Layers,ArrowUpNarrowWide, Briefcase, CheckSquare, LogOut, Volume2, RefreshCw,
+  Clock,MoveDown,MoveUp, CircleQuestionMark, FileSpreadsheet,FolderPlus,FolderMinus, Printer, Save, HelpCircle, Eye,
+  EyeOff, Check,ChartNoAxesCombined, Bell,FolderPen,PlusIcon,Pencil,SaveIcon,HashIcon, MessageSquare, Calendar, Trash2,
   HistoryIcon,
   CheckCheckIcon,
   Layers2,
+  ChervronLeft,
+  RefreshCwIcon,
+  ArrowRight,
+  Expand,
+  Keyboard,
+  Asterisk,
+  Barcode,
+  Power,
+  Repeat,
   Layers3,
   DownloadIcon,
   DownloadCloudIcon,
@@ -35,7 +43,7 @@ const POSApplication = () => {
   const [products, setProducts] = useState([]);
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  
+
   const [newProduct, setNewProduct] = useState({
     name: '',
     code: '1',
@@ -87,55 +95,46 @@ const POSApplication = () => {
 
   const POSSystem = () => (
     <div className="pos-container">
-      <div className="title-bar">
-        <div className="title-left">
-          <div className="app-icon"></div>
-          <span className="app-name">Aronium Lite</span>
-        </div>
-        <div className="window-controls">
-          <button className="window-btn minimize-btn">−</button>
-          <button className="window-btn maximize-btn">□</button>
-          <button className="window-btn close-btn">
-            <X size={12} />
-          </button>
-        </div>
-      </div>
       <div className="top-bar-functions">
-        <div className="function-group">
-          <button className="function-btn"><Search size={16} /><span>Search</span></button>
-          <button className="function-btn"><User size={16} /><span>Customer</span></button>
-          <button className="function-btn"><ArrowRightLeft size={16} /><span>Transfer</span></button>
-          <button className="function-btn"><Percent size={16} /><span>Discount</span></button>
+        <div className="function-groups">
+          <div className="function-group">
+            <button className="function-btn"><Search size={16} /><span>Search</span></button>
+            <button className="function-btn"><User size={16} /><span>Customer</span></button>
+            <button className="function-btn"><ArrowRightLeft size={16} /><span>Transfer</span></button>
+            <button className="function-btn"><Percent size={16} /><span>Discount</span></button>
+          </div>
+          <div className="function-group">
+            <button className="function-btn"><Plus size={16} /><span>New sale</span></button>
+            <button className="function-btn"><RotateCcw size={16} /><span>Refund</span></button>
+            <button className="function-btn"><Calculator size={16} /><span>Cash drawer</span></button>
+            <button className="function-btn"><span className="function-key">F9</span><span>Save sale</span></button>
+          </div>
+          <div className="function-group">
+            <button className="function-btn payment-btn"><span className="function-key">F10</span><span>Payment</span></button>
+            <button className="function-btn"><span className="function-key">F12</span><span>Cash</span></button>
+            <button className="function-btn"><CreditCard size={16} /><span>Card</span></button>
+          </div>
+          <div className="function-group-single">
+            <button className="function-btn check-btn"><CreditCard size={16} /><span>Check</span></button>
+          </div>
         </div>
-        <div className="function-group">
-          <button className="function-btn"><Plus size={16} /><span>New sale</span></button>
-          <button className="function-btn"><RotateCcw size={16} /><span>Refund</span></button>
-          <button className="function-btn"><Calculator size={16} /><span>Cash drawer</span></button>
-          <button className="function-btn"><span className="function-key">F9</span><span>Save sale</span></button>
-        </div>
-        <div className="function-group">
-          <button className="function-btn payment-btn"><span className="function-key">F10</span><span>Payment</span></button>
-          <button className="function-btn"><span className="function-key">F12</span><span>Cash</span></button>
-          <button className="function-btn"><CreditCard size={16} /><span>Card</span></button>
-        </div>
-        <div className="function-group-single">
-          <button className="function-btn check-btn"><CreditCard size={16} /><span>Check</span></button>
-        </div>
+        <button className="admin-menu-trigger" onClick={() => setShowAdminMenu(!showAdminMenu)}><Menu size={16} /></button>
       </div>
       <Split className="main-content" sizes={[30, 70]} minSize={100} expandToMin={false} gutterSize={10} gutterAlign="center" direction="horizontal">
         <div className="left-panel">
           <div className="cart-controls">
-            <button className="delete-btn"><X size={14} />Delete</button>
-            <div className="quantity-control">
-              <span>Quantity</span>
-              <input
-                type="text"
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
-                className="quantity-input"
-              />
-            </div>
-          </div>
+  <button className="delete-btn"><X size={14} />Delete</button>
+  <div className="quantity-control">
+    
+    <input
+      type="text"
+      value={quantity}
+      onChange={(e) => setQuantity(e.target.value)}
+      className="quantity-input"
+      placeholder="Quantity"
+    />
+  </div>
+</div>
           <div className="items-area">
             <div className="no-items">No items</div>
           </div>
@@ -145,17 +144,19 @@ const POSApplication = () => {
             <div className="total-divider"></div>
             <div className="total-line total-main"><span>Total</span><span>0.00</span></div>
           </div>
+          
           <div className="action-buttons">
             <button className="action-button void-button">
-              <Trash2 size={14} color="white" />Void o...</button>
+              <Trash2 size={14} color="white" />Void order
+            </button>
             <button className="action-button lock-button"><Lock size={14} />Lock</button>
-            <button className="action-button repeat-button"><RotateCcw size={14} />Repeat ro...</button>
+            <button className="action-button repeat-button"><Repeat size={14} />Repeat order</button>
           </div>
         </div>
         <div className="right-panel">
           <div className="search-bar">
-            <button className="search-tool"><Star size={16} /></button>
-            <button className="search-tool"><Scan size={16} /></button>
+            <button className="search-tool"><Asterisk size={16} /></button>
+            <button className="search-tool"><Barcode size={16} /></button>
             <button className="search-tool"><Hash size={16} /></button>
             <button className="search-tool">
               <TagIcon style={{ width: '16px', height: '16px', color: 'blue' }} />
@@ -170,27 +171,13 @@ const POSApplication = () => {
               />
               <button className="search-button"><Search size={16} /></button>
             </div>
-            <button className="search-tool" onClick={() => setShowAdminMenu(true)}><Menu size={16} /></button>
+            <button className="search-tool"><Keyboard size={16} /></button>
           </div>
           <div className="products-area">
             <div className="empty-products">
               <TagIcon style={{ width: '48px', height: '48px', color: 'red' }} />
               <h2 className="empty-title" style={{ color: '#ff0000' }}>No products available</h2>
               <p className="empty-desc" style={{ color: '#ff0000' }}>Please, add products or set sale price to existing ones to continue</p>
-            </div>
-          </div>
-          <div className="bottom-bar">
-            <div className="page-indicator">Page 1 / 0</div>
-            <div className="navigation-controls">
-              <button className="nav-control"><Home size={16} /></button>
-              <button className="nav-control"><SkipBack size={16} /></button>
-              <button className="nav-control"><ChevronLeft size={16} /></button>
-              <button className="nav-control"><ChevronRight size={16} /></button>
-              <button className="nav-control"><SkipForward size={16} /></button>
-            </div>
-            <div className="time-info">
-              <div>11:40 AM</div>
-              <div>9/23/2025</div>
             </div>
           </div>
         </div>
@@ -200,22 +187,47 @@ const POSApplication = () => {
 
   const ManagementDashboard = () => {
     const renderSidebar = () => (
-      <div className={`management-sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
-        <div className="sidebar-header">
-          <button onClick={() => setCurrentView('pos')} className="back-btn"><ArrowLeft size={20} /></button>
-          {!sidebarCollapsed && <span>Management • {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}</span>}
-          <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="collapse-btn">{sidebarCollapsed ? '»' : '«'}</button>
-        </div>
-        <nav className="sidebar-nav">
-          {menuItems.map(item => (
-            <button key={item.id} className={`nav-item ${activeSection === item.id ? 'active' : ''}`} onClick={() => setActiveSection(item.id)} title={sidebarCollapsed ? item.label : ''}>
-              <item.icon size={20} />
-              {!sidebarCollapsed && <span>{item.label}</span>}
-            </button>
-          ))}
-        </nav>
-      </div>
-    );
+  <div className={`management-sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}
+>
+    {/* Header */}
+    <div className="sidebar-header">
+      <button onClick={() => setCurrentView('pos')} className="back-btn">
+        <ArrowLeft size={20} />
+      </button>
+      {!sidebarCollapsed && (
+        <span>
+          Management • {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
+        </span>
+      )}
+    </div>
+
+    {/* Navigation */}
+    <nav className="sidebar-nav">
+      {menuItems.map((item) => (
+        <button
+          key={item.id}
+          className={`nav-item ${activeSection === item.id ? 'active' : ''}`}
+
+          onClick={() => setActiveSection(item.id)}
+          title={sidebarCollapsed ? item.label : ''}
+        >
+          <item.icon size={20} />
+          {!sidebarCollapsed && <span>{item.label}</span>}
+        </button>
+      ))}
+    </nav>
+
+    {/* Collapse button at bottom */}
+    <div className="sidebar-footer">
+      <button
+        onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+        className="collapse-btn"
+      >
+        {sidebarCollapsed ? '»' : '«'}
+      </button>
+    </div>
+  </div>
+);
 
     const renderDashboard = () => (
       <div className="dashboard-content">
@@ -427,7 +439,7 @@ const POSApplication = () => {
     );
 
     const renderContent = () => {
-      switch(activeSection) {
+      switch (activeSection) {
         case 'dashboard': return renderDashboard();
         case 'documents': return renderDocuments();
         case 'products': return renderProducts();
@@ -459,30 +471,76 @@ const POSApplication = () => {
     );
   };
 
-  const AdminMenuOverlay = () => (
-    <div className="admin-menu-overlay" onClick={() => setShowAdminMenu(false)}>
-      <div className="admin-menu" onClick={e => e.stopPropagation()}>
-        <div className="admin-header">
-          <h3>POS - Admin</h3>
-          <button className="close-admin" onClick={() => setShowAdminMenu(false)}><X size={16} /></button>
-        </div>
-        <div className="admin-section">
-          {adminMenuItems.map(item => (
-            <button key={item.id} className="admin-item" onClick={() => {if (item.action) item.action(); setShowAdminMenu(false);}}>
-              <item.icon size={20} /><span>{item.label}</span>
+  const AdminMenuOverlay = () => {
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowAdminMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    showAdminMenu && (
+      <div className="admin-overlay">
+        <div className="admin-menu" ref={menuRef}>
+          {/* Header */}
+          <div className="admin-header">
+            <h3>POS - Admin</h3>
+            <button className="close-btn" onClick={() => setShowAdminMenu(false)}>
+  <ArrowRight size={16} />
+</button>
+          </div>
+
+          {/* Menu Items */}
+          <ul className="admin-list">
+            {adminMenuItems.map((item) => (
+              <li
+                key={item.id}
+                onClick={() => {
+                  if (item.action) item.action();
+                  setShowAdminMenu(false);
+                }}
+              >
+                <item.icon className="admin-icon" />
+                <span>{item.label}</span>
+              </li>
+            ))}
+          </ul>
+
+          {/* User Section */}
+          <div className="admin-user">
+            <h4>User</h4>
+            <button onClick={() => setShowAdminMenu(false)}>
+              <User className="admin-icon" /> User info
             </button>
-          ))}
+            <button onClick={() => setShowAdminMenu(false)}>
+              <LogOut className="admin-icon" /> Sign out
+            </button>
+            <button onClick={() => setShowAdminMenu(false)}>
+              <MessageSquare className="admin-icon" /> Feedback
+            </button>
+          </div>
+
+          {/* Date */}
+          <div className="admin-date">{new Date().toLocaleDateString()}</div>
+
+          {/* Bottom Controls */}
+          <div className="admin-footer">
+            <Settings className="admin-icon" />
+            <Expand className="admin-icon" />
+            <Power className="admin-icon" />
+          </div>
         </div>
-        <div className="admin-section">
-          <h4>User</h4>
-          <button className="admin-item"><User size={20} /><span>User info</span></button>
-          <button className="admin-item"><LogOut size={20} /><span>Sign out</span></button>
-          <button className="admin-item"><Volume2 size={20} /><span>Feedback</span></button>
-        </div>
-        <div className="admin-footer"><span>9/23/2025</span></div>
       </div>
-    </div>
-  );
+    )
+  );
+};
+
 
   const AddProductForm = () => {
     const handleSave = () => {
@@ -494,7 +552,7 @@ const POSApplication = () => {
         setShowAddProduct(false);
       }
     };
-    
+
     return (
       <div className="add-product-overlay" onClick={() => setShowAddProduct(false)}>
         <div className="add-product-form" onClick={e => e.stopPropagation()}>
@@ -513,24 +571,24 @@ const POSApplication = () => {
           <div className="form-content">
             <div className="form-group">
               <label>Name *</label>
-              <input type="text" value={newProduct.name} onChange={(e) => setNewProduct({...newProduct, name: e.target.value})} className={`form-input ${!newProduct.name.trim() ? 'name-required' : ''}`} placeholder="Enter product name"/>
+              <input type="text" value={newProduct.name} onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })} className={`form-input ${!newProduct.name.trim() ? 'name-required' : ''}`} placeholder="Enter product name" />
             </div>
             <div className="form-group">
               <label>Code</label>
-              <input type="text" value={newProduct.code} onChange={(e) => setNewProduct({...newProduct, code: e.target.value})} className="form-input"/>
+              <input type="text" value={newProduct.code} onChange={(e) => setNewProduct({ ...newProduct, code: e.target.value })} className="form-input" />
             </div>
             <div className="form-group">
               <label>Barcode</label>
-              <input type="text" value={newProduct.barcode} onChange={(e) => setNewProduct({...newProduct, barcode: e.target.value})} className="form-input" placeholder="Scan or enter barcode"/>
+              <input type="text" value={newProduct.barcode} onChange={(e) => setNewProduct({ ...newProduct, barcode: e.target.value })} className="form-input" placeholder="Scan or enter barcode" />
               <button className="generate-barcode">Generate barcode</button>
             </div>
             <div className="form-group">
               <label>Unit of measurement</label>
-              <input type="text" value={newProduct.unitOfMeasurement} onChange={(e) => setNewProduct({...newProduct, unitOfMeasurement: e.target.value})} className="form-input" placeholder="e.g., pcs, kg, liter"/>
+              <input type="text" value={newProduct.unitOfMeasurement} onChange={(e) => setNewProduct({ ...newProduct, unitOfMeasurement: e.target.value })} className="form-input" placeholder="e.g., pcs, kg, liter" />
             </div>
             <div className="form-group">
               <label>Group</label>
-              <select value={newProduct.group} onChange={(e) => setNewProduct({...newProduct, group: e.target.value})} className="form-select">
+              <select value={newProduct.group} onChange={(e) => setNewProduct({ ...newProduct, group: e.target.value })} className="form-select">
                 <option>Products</option>
                 <option>Electronics</option>
                 <option>Clothing</option>
@@ -540,28 +598,28 @@ const POSApplication = () => {
             </div>
             <div className="form-checkboxes">
               <label className="checkbox-group">
-                <input type="checkbox" checked={newProduct.active} onChange={(e) => setNewProduct({...newProduct, active: e.target.checked})}/>
+                <input type="checkbox" checked={newProduct.active} onChange={(e) => setNewProduct({ ...newProduct, active: e.target.checked })} />
                 <span className={`checkmark ${newProduct.active ? 'active' : ''}`}></span><span>Active</span>
               </label>
               <label className="checkbox-group">
-                <input type="checkbox" checked={newProduct.defaultQuantity} onChange={(e) => setNewProduct({...newProduct, defaultQuantity: e.target.checked})}/>
+                <input type="checkbox" checked={newProduct.defaultQuantity} onChange={(e) => setNewProduct({ ...newProduct, defaultQuantity: e.target.checked })} />
                 <span className={`checkmark ${newProduct.defaultQuantity ? 'active' : ''}`}></span><span>Default quantity</span>
               </label>
               <label className="checkbox-group">
-                <input type="checkbox" checked={newProduct.service} onChange={(e) => setNewProduct({...newProduct, service: e.target.checked})}/>
+                <input type="checkbox" checked={newProduct.service} onChange={(e) => setNewProduct({ ...newProduct, service: e.target.checked })} />
                 <span className={`checkmark ${newProduct.service ? 'active' : ''}`}></span><span>Service (not using stock)</span>
               </label>
             </div>
             <div className="form-group">
               <label>Age restriction</label>
               <div className="age-restriction">
-                <input type="number" value={newProduct.ageRestriction} onChange={(e) => setNewProduct({...newProduct, ageRestriction: e.target.value})} className="form-input age-input" placeholder="0"/>
+                <input type="number" value={newProduct.ageRestriction} onChange={(e) => setNewProduct({ ...newProduct, ageRestriction: e.target.value })} className="form-input age-input" placeholder="0" />
                 <span>year(s)</span>
               </div>
             </div>
             <div className="form-group">
               <label>Description</label>
-              <textarea value={newProduct.description} onChange={(e) => setNewProduct({...newProduct, description: e.target.value})} className="form-textarea" placeholder="Enter product description..."/>
+              <textarea value={newProduct.description} onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })} className="form-textarea" placeholder="Enter product description..." />
             </div>
           </div>
           <div className="form-footer">
@@ -572,7 +630,7 @@ const POSApplication = () => {
       </div>
     );
   };
-  
+
   return (
     <div className="app-container">
       {currentView === 'pos' && <POSSystem />}
