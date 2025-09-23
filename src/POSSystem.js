@@ -2,6 +2,11 @@ import './POSSystem.css';
 import { MdSettings, MdHistory, MdShoppingCart, MdAttachMoney, MdCreditCard, MdSchedule, MdPerson, MdExitToApp, MdEvent, MdAccessTime } from 'react-icons/md';
 import React, { useState } from 'react';
 import { TagIcon } from "@heroicons/react/24/solid";
+<<<<<<< HEAD
+=======
+import Split from 'react-split';
+
+>>>>>>> fbe88d851cf78b3d7ba940d622ecfb78ea3db266
 import { 
   Search, User, ArrowRightLeft, Tag, Plus, RotateCcw, Calculator, 
   CreditCard, Menu, X, Hash, Star, Scan, Home, ChevronLeft, 
@@ -198,6 +203,7 @@ const POSApplication = () => {
           <button className="function-btn check-btn"><CreditCard size={16} /><span>Check</span></button>
         </div>
       </div>
+<<<<<<< HEAD
       <div className="main-content">
         <div className="split-container">
           <Sidebar
@@ -238,6 +244,20 @@ const POSApplication = () => {
                 <button className="search-button"><Search size={16} /></button>
               </div>
               <button className="search-tool" onClick={() => setShowAdminMenu(true)}><Menu size={16} /></button>
+=======
+      <Split className="main-content" sizes={[30, 70]} minSize={100} expandToMin={false} gutterSize={10} gutterAlign="center" direction="horizontal">
+        <div className="left-panel">
+          <div className="cart-controls">
+            <button className="delete-btn"><X size={14} />Delete</button>
+            <div className="quantity-control">
+              <span>Quantity</span>
+              <input
+                type="text"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                className="quantity-input"
+              />
+>>>>>>> fbe88d851cf78b3d7ba940d622ecfb78ea3db266
             </div>
             <div className="products-area">
               <div className="empty-products">
@@ -262,7 +282,7 @@ const POSApplication = () => {
             </div>
           </div>
         </div>
-      </div>
+      </Split>
     </div>
   );
 
