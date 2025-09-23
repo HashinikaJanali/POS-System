@@ -2,7 +2,6 @@ import './POSSystem.css';
 import { MdSettings, MdHistory, MdShoppingCart, MdAttachMoney, MdCreditCard, MdSchedule, MdPerson, MdExitToApp, MdEvent, MdAccessTime } from 'react-icons/md';
 import React, { useState } from 'react';
 import { TagIcon } from "@heroicons/react/24/solid";
-
 import { 
   Search, User, ArrowRightLeft, Tag, Plus, RotateCcw, Calculator, 
   CreditCard, Menu, X, Hash, Star, Scan, Home, ChevronLeft, 
@@ -33,8 +32,15 @@ const POSApplication = () => {
   const [showAdminMenu, setShowAdminMenu] = useState(false);
   const [products, setProducts] = useState([]);
   const [showAddProduct, setShowAddProduct] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  
+  const [sidebarWidth, setSidebarWidth] = useState(300);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false); // Reintroduced
+  const [cartItems, setCartItems] = useState([
+    { id: 1, name: 'Test Product', code: 'TP001', quantity: 2, price: 10.99, total: 21.98, isDeleted: false }
+  ]);
+  const [subtotal, setSubtotal] = useState(21.98);
+  const [tax, setTax] = useState(2.20);
+  const [total, setTotal] = useState(24.18);
+
   const [newProduct, setNewProduct] = useState({
     name: '',
     code: '1',
@@ -84,6 +90,77 @@ const POSApplication = () => {
     { id: 'end-of-day', label: 'End of day', icon: GrSchedule }
   ];
 
+  const handleResize = (e) => {
+    const container = document.querySelector('.main-content');
+    const rect = container.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const newWidth = Math.max(200, Math.min(offsetX, rect.width - 200)); // Constrain between 200px and remaining space
+    setSidebarWidth(newWidth);
+  };
+
+  const Sidebar = ({ 
+    cartItems, 
+    onUpdateQuantity, 
+    onDeleteItem, 
+    subtotal, 
+    tax, 
+    total,
+    width 
+  }) => {
+    const activeItems = cartItems.filter(item => !item.isDeleted);
+
+    return (
+      <aside className="sidebar" style={{ width: `${width}px` }}>
+        <div className="cart-controls">
+          <button className="delete-btn"><X size={14} />Delete</button>
+          <div className="quantity-control">
+            <span>Quantity</span>
+            <input
+              type="text"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+              className="quantity-input"
+            />
+          </div>
+        </div>
+        <div className="items-area">
+          {activeItems.length > 0 ? (
+            activeItems.map((item) => (
+              <div key={item.id} className="cart-item">
+                <div className="item-info">
+                  <div className="item-header">
+                    <span className="item-name">{item.name}</span>
+                    <span className="item-quantity">{item.quantity}</span>
+                  </div>
+                  <div className="item-details">
+                    <span className="item-code">#{item.id} {item.code}</span>
+                    <span className="item-price">{item.price.toFixed(2)}</span>
+                    <span className="item-total">{item.total.toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="no-items">No items</div>
+          )}
+        </div>
+        <div className="totals-section">
+          <div className="total-line"><span>Subtotal</span><span>{subtotal.toFixed(2)}</span></div>
+          <div className="total-line"><span>Tax</span><span>{tax.toFixed(2)}</span></div>
+          <div className="total-divider"></div>
+          <div className="total-line total-main"><span>Total</span><span>{total.toFixed(2)}</span></div>
+        </div>
+        <div className="action-buttons">
+          <button className="action-button void-button">
+            <Trash2 size={14} color="white" />Void order
+          </button>
+          <button className="action-button lock-button"><Lock size={14} />Lock</button>
+          <button className="action-button repeat-button"><RotateCcw size={14} />Repeat</button>
+        </div>
+      </aside>
+    );
+  };
+
   const POSSystem = () => (
     <div className="pos-container">
       <div className="title-bar">
@@ -122,74 +199,66 @@ const POSApplication = () => {
         </div>
       </div>
       <div className="main-content">
-        <div className="left-panel">
-          <div className="cart-controls">
-            <button className="delete-btn"><X size={14} />Delete</button>
-            <div className="quantity-control">
-              <span>Quantity</span>
-              <input
-                type="text"
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
-                className="quantity-input"
-              />
+        <div className="split-container">
+          <Sidebar
+            cartItems={cartItems}
+            onUpdateQuantity={() => {}} // Placeholder
+            onDeleteItem={() => {}} // Placeholder
+            subtotal={subtotal}
+            tax={tax}
+            total={total}
+            width={sidebarWidth}
+          />
+          <div 
+            className="splitter"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              document.addEventListener('mousemove', handleResize);
+              document.addEventListener('mouseup', () => {
+                document.removeEventListener('mousemove', handleResize);
+              }, { once: true });
+            }}
+          ></div>
+          <div className="right-panel">
+            <div className="search-bar">
+              <button className="search-tool"><Star size={16} /></button>
+              <button className="search-tool"><Scan size={16} /></button>
+              <button className="search-tool"><Hash size={16} /></button>
+              <button className="search-tool">
+                <TagIcon style={{ width: '16px', height: '16px', color: 'blue' }} />
+              </button>
+              <div className="search-field">
+                <input
+                  type="text"
+                  placeholder="Search products by name"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="search-input"
+                />
+                <button className="search-button"><Search size={16} /></button>
+              </div>
+              <button className="search-tool" onClick={() => setShowAdminMenu(true)}><Menu size={16} /></button>
             </div>
-          </div>
-          <div className="items-area">
-            <div className="no-items">No items</div>
-          </div>
-          <div className="totals-section">
-            <div className="total-line"><span>Subtotal</span><span>0.00</span></div>
-            <div className="total-line"><span>Tax</span><span>0.00</span></div>
-            <div className="total-divider"></div>
-            <div className="total-line total-main"><span>Total</span><span>0.00</span></div>
-          </div>
-          <div className="action-buttons">
-            <button className="action-button void-button">
-              <Trash2 size={14} color="white" />Void o...</button>
-            <button className="action-button lock-button"><Lock size={14} />Lock</button>
-            <button className="action-button repeat-button"><RotateCcw size={14} />Repeat ro...</button>
-          </div>
-        </div>
-        <div className="right-panel">
-          <div className="search-bar">
-            <button className="search-tool"><Star size={16} /></button>
-            <button className="search-tool"><Scan size={16} /></button>
-            <button className="search-tool"><Hash size={16} /></button>
-            <button className="search-tool">
-              <TagIcon style={{ width: '16px', height: '16px', color: 'blue' }} />
-            </button>
-            <div className="search-field">
-              <input
-                type="text"
-                placeholder="Search products by name"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-input"
-              />
-              <button className="search-button"><Search size={16} /></button>
+            <div className="products-area">
+              <div className="empty-products">
+                <TagIcon style={{ width: '48px', height: '48px', color: 'red' }} />
+                <h2 className="empty-title" style={{ color: '#ff0000' }}>No products available</h2>
+                <p className="empty-desc" style={{ color: '#ff0000' }}>Please, add products or set sale price to existing ones to continue</p>
+              </div>
             </div>
-            <button className="search-tool" onClick={() => setShowAdminMenu(true)}><Menu size={16} /></button>
-          </div>
-          <div className="products-area">
-            <div className="empty-products">
-              <TagIcon style={{ width: '48px', height: '48px', color: 'red' }} />
-              <h2 className="empty-title" style={{ color: '#ff0000' }}>No products available</h2>
-              <p className="empty-desc" style={{ color: '#ff0000' }}>Please, add products or set sale price to existing ones to continue</p>
-            </div>
-          </div>
-          <div className="bottom-bar">
-            <div className="page-indicator">Page 1 / 0</div>
-            <div className="navigation-controls">
-              <button className="nav-control"><Home size={16} /></button>
-              <button className="nav-control"><SkipBack size={16} /></button>
-              <button className="nav-control"><ChevronLeft size={16} /></button>
-              <button className="nav-control"><ChevronRight size={16} /></button>
-              <button className="nav-control"><SkipForward size={16} /></button>
-            </div>
-            <div className="time-info">
-              <div>11:40 AM</div>
-              <div>9/23/2025</div>
+            <div className="bottom-bar">
+              <div className="page-indicator">Page 1 / 0</div>
+              <div className="navigation-controls">
+                <button className="nav-control"><Home size={16} /></button>
+                <button className="nav-control"><SkipBack size={16} /></button>
+                <button className="nav-control"><ChevronLeft size={16} /></button>
+                <button className="nav-control"><ChevronRight size={16} /></button>
+                <button className="nav-control"><SkipForward size={16} /></button>
+              </div>
+              <div className="time-info">
+                <div>04:20 PM</div> {/* Updated to current time */}
+                <div>9/23/2025</div>
+              </div>
             </div>
           </div>
         </div>
