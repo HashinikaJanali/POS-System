@@ -2,6 +2,7 @@ import './POSSystem.css';
 import { MdSettings, MdHistory, MdShoppingCart, MdAttachMoney, MdCreditCard, MdSchedule, MdPerson, MdExitToApp, MdEvent, MdAccessTime } from 'react-icons/md';
 import React, { useState } from 'react';
 import { TagIcon } from "@heroicons/react/24/solid";
+import Split from 'react-split';
 
 import { 
   Search, User, ArrowRightLeft, Tag, Plus, RotateCcw, Calculator, 
@@ -121,7 +122,7 @@ const POSApplication = () => {
           <button className="function-btn check-btn"><CreditCard size={16} /><span>Check</span></button>
         </div>
       </div>
-      <div className="main-content">
+      <Split className="main-content" sizes={[30, 70]} minSize={100} expandToMin={false} gutterSize={10} gutterAlign="center" direction="horizontal">
         <div className="left-panel">
           <div className="cart-controls">
             <button className="delete-btn"><X size={14} />Delete</button>
@@ -193,7 +194,7 @@ const POSApplication = () => {
             </div>
           </div>
         </div>
-      </div>
+      </Split>
     </div>
   );
 

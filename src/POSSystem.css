@@ -1612,3 +1612,32 @@
     transform: rotate(360deg);
   }
 } 
+
+/* Style for the gutter (resizable divider) */
+.split {
+  display: flex;
+  height: 100%;
+}
+
+.gutter {
+  background-color: #ffffff66; 
+  width: 4px; /* Thin width for the gutter */
+  cursor: col-resize; /* Indicates the area can be dragged horizontally */
+  transition: background-color 0.2s; /* Smooth transition for hover effect */
+}
+
+.gutter:hover {
+  background-color: #ffffff66; /* Slightly darker green on hover */
+}
+
+/* Ensure the gutter is centered and doesn't interfere with panel content */
+.gutter.gutter-horizontal {
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
+/* Ensure the gutter is interactive and visible */
+.gutter:hover::before {
+  background-color: #ffffff66; /* Slightly more visible on hover */
+}
