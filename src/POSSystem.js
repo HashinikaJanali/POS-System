@@ -1,14 +1,14 @@
 import './POSSystem.css';
-
+import Split from "react-split";
 import React, { useState } from 'react';
-import { 
-  Search, User, ArrowRightLeft, Tag, Plus, RotateCcw, Calculator, 
-  CreditCard, Menu, X, Hash, Star, Scan, Home, ChevronLeft, 
-  ChevronRight, SkipBack, SkipForward, Lock, LayoutDashboard, 
-  FileText, Package, Archive, BarChart3, Users, Heart, Key, 
-  Globe, Percent, Building, ArrowLeft, Settings, TrendingUp, 
-  Layers, Briefcase, CheckSquare, LogOut, Volume2, RefreshCw, 
-  Clock, FileSpreadsheet, Printer, Save, HelpCircle, Eye, 
+import {
+  Search, User, ArrowRightLeft, Tag, Plus, RotateCcw, Calculator,
+  CreditCard, Menu, X, Hash, Star, Scan, Home, ChevronLeft,
+  ChevronRight, SkipBack, SkipForward, Lock, LayoutDashboard,
+  FileText, Package, Archive, BarChart3, Users, Heart, Key,
+  Globe, Percent, Building, ArrowLeft, Settings, TrendingUp,
+  Layers, Briefcase, CheckSquare, LogOut, Volume2, RefreshCw,
+  Clock, FileSpreadsheet, Printer, Save, HelpCircle, Eye,
   EyeOff, Check, Bell, MessageSquare, Calendar, Trash2
 } from 'lucide-react';
 
@@ -21,7 +21,7 @@ const POSApplication = () => {
   const [products, setProducts] = useState([]);
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  
+
   const [newProduct, setNewProduct] = useState({
     name: '',
     code: '1',
@@ -411,7 +411,7 @@ const POSApplication = () => {
     );
 
     const renderContent = () => {
-      switch(activeSection) {
+      switch (activeSection) {
         case 'dashboard': return renderDashboard();
         case 'documents': return renderDocuments();
         case 'products': return renderProducts();
@@ -452,7 +452,7 @@ const POSApplication = () => {
         </div>
         <div className="admin-section">
           {adminMenuItems.map(item => (
-            <button key={item.id} className="admin-item" onClick={() => {if (item.action) item.action(); setShowAdminMenu(false);}}>
+            <button key={item.id} className="admin-item" onClick={() => { if (item.action) item.action(); setShowAdminMenu(false); }}>
               <item.icon size={20} /><span>{item.label}</span>
             </button>
           ))}
@@ -478,7 +478,7 @@ const POSApplication = () => {
         setShowAddProduct(false);
       }
     };
-    
+
     return (
       <div className="add-product-overlay" onClick={() => setShowAddProduct(false)}>
         <div className="add-product-form" onClick={e => e.stopPropagation()}>
@@ -497,24 +497,24 @@ const POSApplication = () => {
           <div className="form-content">
             <div className="form-group">
               <label>Name *</label>
-              <input type="text" value={newProduct.name} onChange={(e) => setNewProduct({...newProduct, name: e.target.value})} className={`form-input ${!newProduct.name.trim() ? 'name-required' : ''}`} placeholder="Enter product name"/>
+              <input type="text" value={newProduct.name} onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })} className={`form-input ${!newProduct.name.trim() ? 'name-required' : ''}`} placeholder="Enter product name" />
             </div>
             <div className="form-group">
               <label>Code</label>
-              <input type="text" value={newProduct.code} onChange={(e) => setNewProduct({...newProduct, code: e.target.value})} className="form-input"/>
+              <input type="text" value={newProduct.code} onChange={(e) => setNewProduct({ ...newProduct, code: e.target.value })} className="form-input" />
             </div>
             <div className="form-group">
               <label>Barcode</label>
-              <input type="text" value={newProduct.barcode} onChange={(e) => setNewProduct({...newProduct, barcode: e.target.value})} className="form-input" placeholder="Scan or enter barcode"/>
+              <input type="text" value={newProduct.barcode} onChange={(e) => setNewProduct({ ...newProduct, barcode: e.target.value })} className="form-input" placeholder="Scan or enter barcode" />
               <button className="generate-barcode">Generate barcode</button>
             </div>
             <div className="form-group">
               <label>Unit of measurement</label>
-              <input type="text" value={newProduct.unitOfMeasurement} onChange={(e) => setNewProduct({...newProduct, unitOfMeasurement: e.target.value})} className="form-input" placeholder="e.g., pcs, kg, liter"/>
+              <input type="text" value={newProduct.unitOfMeasurement} onChange={(e) => setNewProduct({ ...newProduct, unitOfMeasurement: e.target.value })} className="form-input" placeholder="e.g., pcs, kg, liter" />
             </div>
             <div className="form-group">
               <label>Group</label>
-              <select value={newProduct.group} onChange={(e) => setNewProduct({...newProduct, group: e.target.value})} className="form-select">
+              <select value={newProduct.group} onChange={(e) => setNewProduct({ ...newProduct, group: e.target.value })} className="form-select">
                 <option>Products</option>
                 <option>Electronics</option>
                 <option>Clothing</option>
@@ -524,28 +524,28 @@ const POSApplication = () => {
             </div>
             <div className="form-checkboxes">
               <label className="checkbox-group">
-                <input type="checkbox" checked={newProduct.active} onChange={(e) => setNewProduct({...newProduct, active: e.target.checked})}/>
+                <input type="checkbox" checked={newProduct.active} onChange={(e) => setNewProduct({ ...newProduct, active: e.target.checked })} />
                 <span className={`checkmark ${newProduct.active ? 'active' : ''}`}></span><span>Active</span>
               </label>
               <label className="checkbox-group">
-                <input type="checkbox" checked={newProduct.defaultQuantity} onChange={(e) => setNewProduct({...newProduct, defaultQuantity: e.target.checked})}/>
+                <input type="checkbox" checked={newProduct.defaultQuantity} onChange={(e) => setNewProduct({ ...newProduct, defaultQuantity: e.target.checked })} />
                 <span className={`checkmark ${newProduct.defaultQuantity ? 'active' : ''}`}></span><span>Default quantity</span>
               </label>
               <label className="checkbox-group">
-                <input type="checkbox" checked={newProduct.service} onChange={(e) => setNewProduct({...newProduct, service: e.target.checked})}/>
+                <input type="checkbox" checked={newProduct.service} onChange={(e) => setNewProduct({ ...newProduct, service: e.target.checked })} />
                 <span className={`checkmark ${newProduct.service ? 'active' : ''}`}></span><span>Service (not using stock)</span>
               </label>
             </div>
             <div className="form-group">
               <label>Age restriction</label>
               <div className="age-restriction">
-                <input type="number" value={newProduct.ageRestriction} onChange={(e) => setNewProduct({...newProduct, ageRestriction: e.target.value})} className="form-input age-input" placeholder="0"/>
+                <input type="number" value={newProduct.ageRestriction} onChange={(e) => setNewProduct({ ...newProduct, ageRestriction: e.target.value })} className="form-input age-input" placeholder="0" />
                 <span>year(s)</span>
               </div>
             </div>
             <div className="form-group">
               <label>Description</label>
-              <textarea value={newProduct.description} onChange={(e) => setNewProduct({...newProduct, description: e.target.value})} className="form-textarea" placeholder="Enter product description..."/>
+              <textarea value={newProduct.description} onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })} className="form-textarea" placeholder="Enter product description..." />
             </div>
           </div>
           <div className="form-footer">
@@ -556,7 +556,7 @@ const POSApplication = () => {
       </div>
     );
   };
-  
+
   return (
     <div className="app-container">
       {currentView === 'pos' && <POSSystem />}
