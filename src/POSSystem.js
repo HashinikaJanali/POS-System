@@ -3,6 +3,10 @@ import { MdSettings, MdHistory, MdShoppingCart, MdAttachMoney, MdCreditCard, MdS
 import React, { useState } from 'react';
 import { TagIcon } from "@heroicons/react/24/solid";
 
+
+import { TagIcon as TagSolid } from "@heroicons/react/24/solid";
+
+
 import { 
   Search, User, ArrowRightLeft, Tag, Plus, RotateCcw, Calculator, 
   CreditCard, Menu, X, Hash, Star, Scan, Home, ChevronLeft, 
@@ -15,6 +19,7 @@ import {
   HistoryIcon,
   CheckCheckIcon,
   Layers2,
+
   Layers3,
   DownloadIcon,
   DownloadCloudIcon,
@@ -22,6 +27,19 @@ import {
 } from 'lucide-react';
 import { FcEndCall } from 'react-icons/fc';
 import { GrSchedule } from 'react-icons/gr';
+
+  Layers3Icon,
+  DownloadIcon,
+  LucideLayers3,
+  DownloadCloudIcon,
+  Wrench,
+  DeleteIcon,
+  Trash,
+  Repeat
+} from 'lucide-react';
+import { FcEndCall } from 'react-icons/fc';
+import { GrSchedule } from 'react-icons/gr';
+import { LuLayers3 } from 'react-icons/lu';
 import { BiDownload } from 'react-icons/bi';
 import { BsFillCloudDownloadFill } from 'react-icons/bs';
 
@@ -78,7 +96,10 @@ const POSApplication = () => {
   const adminMenuItems = [
     { id: 'management', label: 'Management', icon: Wrench, action: () => { setCurrentView('management'); setActiveSection('dashboard'); } },
     { id: 'sales-history', label: 'View sales history', icon: CheckCheckIcon },
+
     { id: 'open-sales', label: 'View open sales', icon: Layers3 },
+
+    { id: 'open-sales', label: 'View open sales', icon: LucideLayers3 },
     { id: 'cash-in-out', label: 'Cash In / Out', icon: BsFillCloudDownloadFill },
     { id: 'credit-payments', label: 'Credit payments', icon: CreditCard },
     { id: 'end-of-day', label: 'End of day', icon: GrSchedule }
@@ -145,10 +166,18 @@ const POSApplication = () => {
             <div className="total-line total-main"><span>Total</span><span>0.00</span></div>
           </div>
           <div className="action-buttons">
+
             <button className="action-button void-button">
               <Trash2 size={14} color="white" />Void o...</button>
             <button className="action-button lock-button"><Lock size={14} />Lock</button>
             <button className="action-button repeat-button"><RotateCcw size={14} />Repeat ro...</button>
+
+           <button className="action-button void-button">
+            <Trash size={14} color="white" />Void o...</button>
+
+            <button className="action-button lock-button"><Lock size={14} />Lock</button>
+            <button className="action-button repeat-button"><Repeat size={14} />Repeat ro...</button>
+
           </div>
         </div>
         <div className="right-panel">
@@ -157,8 +186,14 @@ const POSApplication = () => {
             <button className="search-tool"><Scan size={16} /></button>
             <button className="search-tool"><Hash size={16} /></button>
             <button className="search-tool">
+
               <TagIcon style={{ width: '16px', height: '16px', color: 'blue' }} />
             </button>
+
+  <TagSolid style={{ width: '16px', height: '16px', color: 'blue' }} />
+</button>
+
+
             <div className="search-field">
               <input
                 type="text"
@@ -173,7 +208,12 @@ const POSApplication = () => {
           </div>
           <div className="products-area">
             <div className="empty-products">
+
               <TagIcon style={{ width: '48px', height: '48px', color: 'red' }} />
+
+             <TagSolid style={{ width: '48px', height: '48px', color: 'red' }} />
+
+
               <h2 className="empty-title" style={{ color: '#ff0000' }}>No products available</h2>
               <p className="empty-desc" style={{ color: '#ff0000' }}>Please, add products or set sale price to existing ones to continue</p>
             </div>
@@ -188,7 +228,11 @@ const POSApplication = () => {
               <button className="nav-control"><SkipForward size={16} /></button>
             </div>
             <div className="time-info">
+
               <div>11:40 AM</div>
+
+              <div>09:06 AM</div>
+
               <div>9/23/2025</div>
             </div>
           </div>
@@ -585,3 +629,4 @@ const POSApplication = () => {
 };
 
 export default POSApplication;
+
