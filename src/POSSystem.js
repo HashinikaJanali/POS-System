@@ -1,6 +1,9 @@
 import './POSSystem.css';
-
+import { MdSettings, MdHistory, MdShoppingCart, MdAttachMoney, MdCreditCard, MdSchedule, MdPerson, MdExitToApp, MdEvent, MdAccessTime } from 'react-icons/md';
 import React, { useState } from 'react';
+import { TagIcon } from "@heroicons/react/24/solid";
+import { TagIcon as TagSolid } from "@heroicons/react/24/solid";
+
 import { 
   Search, User, ArrowRightLeft, Tag, Plus, RotateCcw, Calculator, 
   CreditCard, Menu, X, Hash, Star, Scan, Home, ChevronLeft, 
@@ -9,8 +12,24 @@ import {
   Globe, Percent, Building, ArrowLeft, Settings, TrendingUp, 
   Layers, Briefcase, CheckSquare, LogOut, Volume2, RefreshCw, 
   Clock, FileSpreadsheet, Printer, Save, HelpCircle, Eye, 
-  EyeOff, Check, Bell, MessageSquare, Calendar, Trash2
+  EyeOff, Check, Bell, MessageSquare, Calendar, Trash2,
+  HistoryIcon,
+  CheckCheckIcon,
+  Layers2,
+  Layers3Icon,
+  DownloadIcon,
+  LucideLayers3,
+  DownloadCloudIcon,
+  Wrench,
+  DeleteIcon,
+  Trash,
+  Repeat
 } from 'lucide-react';
+import { FcEndCall } from 'react-icons/fc';
+import { GrSchedule } from 'react-icons/gr';
+import { LuLayers3 } from 'react-icons/lu';
+import { BiDownload } from 'react-icons/bi';
+import { BsFillCloudDownloadFill } from 'react-icons/bs';
 
 const POSApplication = () => {
   const [currentView, setCurrentView] = useState('pos');
@@ -63,12 +82,12 @@ const POSApplication = () => {
   ];
 
   const adminMenuItems = [
-    { id: 'management', label: 'Management', icon: Settings, action: () => { setCurrentView('management'); setActiveSection('dashboard'); } },
-    { id: 'sales-history', label: 'View sales history', icon: TrendingUp },
-    { id: 'open-sales', label: 'View open sales', icon: Layers },
-    { id: 'cash-in-out', label: 'Cash In / Out', icon: Briefcase },
+    { id: 'management', label: 'Management', icon: Wrench, action: () => { setCurrentView('management'); setActiveSection('dashboard'); } },
+    { id: 'sales-history', label: 'View sales history', icon: CheckCheckIcon },
+    { id: 'open-sales', label: 'View open sales', icon: LucideLayers3 },
+    { id: 'cash-in-out', label: 'Cash In / Out', icon: BsFillCloudDownloadFill },
     { id: 'credit-payments', label: 'Credit payments', icon: CreditCard },
-    { id: 'end-of-day', label: 'End of day', icon: CheckSquare }
+    { id: 'end-of-day', label: 'End of day', icon: GrSchedule }
   ];
 
   const POSSystem = () => (
@@ -87,95 +106,100 @@ const POSApplication = () => {
         </div>
       </div>
       <div className="top-bar-functions">
-        <div className="button-grid-4">
+        <div className="function-group">
           <button className="function-btn"><Search size={16} /><span>Search</span></button>
           <button className="function-btn"><User size={16} /><span>Customer</span></button>
           <button className="function-btn"><ArrowRightLeft size={16} /><span>Transfer</span></button>
-          <button className="function-btn"><Tag size={16} /><span>Discount</span></button>
+          <button className="function-btn"><Percent size={16} /><span>Discount</span></button>
         </div>
-        <div className="button-grid-4">
+        <div className="function-group">
           <button className="function-btn"><Plus size={16} /><span>New sale</span></button>
           <button className="function-btn"><RotateCcw size={16} /><span>Refund</span></button>
           <button className="function-btn"><Calculator size={16} /><span>Cash drawer</span></button>
           <button className="function-btn"><span className="function-key">F9</span><span>Save sale</span></button>
         </div>
-        <div className="button-grid-3">
+        <div className="function-group">
           <button className="function-btn payment-btn"><span className="function-key">F10</span><span>Payment</span></button>
           <button className="function-btn"><span className="function-key">F12</span><span>Cash</span></button>
           <button className="function-btn"><CreditCard size={16} /><span>Card</span></button>
         </div>
-        <div className="button-single">
-          <button className="function-btn check-btn"><span>Check</span></button>
+        <div className="function-group-single">
+          <button className="function-btn check-btn"><CreditCard size={16} /><span>Check</span></button>
         </div>
       </div>
       <div className="main-content">
         <div className="left-panel">
-          <div className="control-section">
-            <div className="control-row">
-              <button className="delete-btn"><X size={14} />Delete</button>
-              <div className="quantity-section">
-                <span className="quantity-label">Quantity</span>
-                <input
-                  type="text"
-                  value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
-                  className="quantity-input"
-                />
-              </div>
+          <div className="cart-controls">
+            <button className="delete-btn"><X size={14} />Delete</button>
+            <div className="quantity-control">
+              <span>Quantity</span>
+              <input
+                type="text"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                className="quantity-input"
+              />
             </div>
           </div>
-          <div className="items-section">
+          <div className="items-area">
             <div className="no-items">No items</div>
           </div>
-          <div className="total-section">
-            <div className="total-row"><span>Subtotal</span><span>0.00</span></div>
-            <div className="total-row"><span>Tax</span><span>0.00</span></div>
+          <div className="totals-section">
+            <div className="total-line"><span>Subtotal</span><span>0.00</span></div>
+            <div className="total-line"><span>Tax</span><span>0.00</span></div>
             <div className="total-divider"></div>
-            <div className="total-row total-final"><span>Total</span><span>0.00</span></div>
+            <div className="total-line total-main"><span>Total</span><span>0.00</span></div>
           </div>
-          <div className="bottom-actions">
-            <button className="action-btn void-btn"><span>Void o...</span></button>
-            <button className="action-btn lock-btn"><Lock size={16} /><span>Lock</span></button>
-            <button className="action-btn repeat-btn"><span>Repeat ro...</span></button>
+          <div className="action-buttons">
+           <button className="action-button void-button">
+            <Trash size={14} color="white" />Void o...</button>
+
+            <button className="action-button lock-button"><Lock size={14} />Lock</button>
+            <button className="action-button repeat-button"><Repeat size={14} />Repeat ro...</button>
           </div>
         </div>
-        <div className="content-area">
-          <div className="search-section">
-            <div className="search-toolbar">
-              <button className="toolbar-btn"><Star size={16} /></button>
-              <button className="toolbar-btn"><Scan size={16} /></button>
-              <button className="toolbar-btn"><Hash size={16} /></button>
-              <button className="toolbar-btn"><Tag size={16} /></button>
-              <div className="search-input-container">
-                <input
-                  type="text"
-                  placeholder="Search products by name"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="search-input"
-                />
-                <button className="search-btn"><Search size={16} /></button>
-              </div>
-              <button className="toolbar-btn" onClick={() => setShowAdminMenu(true)}><Menu size={16} /></button>
+        <div className="right-panel">
+          <div className="search-bar">
+            <button className="search-tool"><Star size={16} /></button>
+            <button className="search-tool"><Scan size={16} /></button>
+            <button className="search-tool"><Hash size={16} /></button>
+            <button className="search-tool">
+  <TagSolid style={{ width: '16px', height: '16px', color: 'blue' }} />
+</button>
+
+            <div className="search-field">
+              <input
+                type="text"
+                placeholder="Search products by name"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+              <button className="search-button"><Search size={16} /></button>
+            </div>
+            <button className="search-tool" onClick={() => setShowAdminMenu(true)}><Menu size={16} /></button>
+          </div>
+          <div className="products-area">
+            <div className="empty-products">
+             <TagSolid style={{ width: '48px', height: '48px', color: 'red' }} />
+
+              <h2 className="empty-title" style={{ color: '#ff0000' }}>No products available</h2>
+              <p className="empty-desc" style={{ color: '#ff0000' }}>Please, add products or set sale price to existing ones to continue</p>
             </div>
           </div>
-          <div className="product-display">
-            <div className="empty-state">
-              <div className="empty-icon"><Tag size={24} /></div>
-              <h2 className="empty-title">No products available</h2>
-              <p className="empty-description">Please, add products or set sale price to existing ones to continue</p>
+          <div className="bottom-bar">
+            <div className="page-indicator">Page 1 / 0</div>
+            <div className="navigation-controls">
+              <button className="nav-control"><Home size={16} /></button>
+              <button className="nav-control"><SkipBack size={16} /></button>
+              <button className="nav-control"><ChevronLeft size={16} /></button>
+              <button className="nav-control"><ChevronRight size={16} /></button>
+              <button className="nav-control"><SkipForward size={16} /></button>
             </div>
-          </div>
-          <div className="bottom-nav">
-            <div className="page-info"><span>Page 1 / 0</span></div>
-            <div className="nav-controls">
-              <button className="nav-btn"><Home size={16} /></button>
-              <button className="nav-btn"><SkipBack size={16} /></button>
-              <button className="nav-btn"><ChevronLeft size={16} /></button>
-              <button className="nav-btn"><ChevronRight size={16} /></button>
-              <button className="nav-btn"><SkipForward size={16} /></button>
+            <div className="time-info">
+              <div>09:06 AM</div>
+              <div>9/23/2025</div>
             </div>
-            <div className="time-display"><div>7:54 PM</div><div>9/7/2025</div></div>
           </div>
         </div>
       </div>
@@ -463,7 +487,7 @@ const POSApplication = () => {
           <button className="admin-item"><LogOut size={20} /><span>Sign out</span></button>
           <button className="admin-item"><Volume2 size={20} /><span>Feedback</span></button>
         </div>
-        <div className="admin-footer"><span>9/7/2025</span></div>
+        <div className="admin-footer"><span>9/23/2025</span></div>
       </div>
     </div>
   );
