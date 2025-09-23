@@ -2164,5 +2164,5 @@
 
 /* Ensure the gutter is interactive and visible */
 .gutter:hover::before {
-  background-color: #ffffff66; /* Slightly more visible on hover */
+  background-color: #b1a2a266; /* Slightly more visible on hover */
 }
