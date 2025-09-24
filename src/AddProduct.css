@@ -1,0 +1,532 @@
+.add-product-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+.add-product-form {
+  background: #1e1e1e;
+  color: #f0f0f0;
+  width: 800px;
+  max-height: 90vh;
+  border-radius: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #333;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #222;
+  color: #fff;
+  padding: 10px 15px;
+}
+
+.form-tabs {
+  display: flex;
+  border-bottom: 1px solid #333;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  background: #2a2a2a;
+  border: none;
+  cursor: pointer;
+  color: #bbb;
+}
+
+.tab.active {
+  background: #1e1e1e;
+  color: #fff;
+  border-bottom: 2px solid #0ea5e9;
+}
+
+.form-content {
+  padding: 20px;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #ddd;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background: #111;
+  color: #fff;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: #888;
+}
+
+.form-checkboxes {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  color: #ddd;
+}
+
+.checkbox-group input {
+  margin-right: 10px;
+}
+
+.age-restriction {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 15px;
+  border-top: 1px solid #333;
+  background: #222;
+}
+
+.save-final-btn {
+  background: #0ea5e9;
+  color: #fff;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: #555;
+  color: #fff;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.cancel-btn:hover {
+  background: #777;
+}
+
+.save-final-btn:hover {
+  background: #0284c7;
+}
+.products-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #1e1e1e;
+  color: #fff;
+  font-family: Segoe UI, sans-serif;
+}
+
+.products-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px; 
+}
+
+.toolbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px; 
+}
+
+
+.toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.toolbar-btn:disabled {
+  color: #666;
+  cursor: not-allowed;
+}
+
+.products-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.products-left {
+  width: 200px;
+  background: #222;
+  padding: 8px;
+  border-right: 1px solid #444;
+}
+
+.group-item {
+  padding: 6px 10px;
+  background: #333;
+  margin-bottom: 4px;
+  border-radius: 4px;
+}
+.group-item.active {
+  background: #0078d4;
+  color: #fff;
+}
+
+.products-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #1e1e1e;
+}
+
+.products-search {
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  border-bottom: 1px solid #444;
+  gap: 6px;
+}
+
+.product-search-input {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid #444;
+  background: #111;
+  color: #fff;
+}
+
+.products-count {
+  margin-left: auto;
+  font-size: 12px;
+  color: #bbb;
+}
+
+.products-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  text-align: center;
+}
+
+.products-empty .empty-icon {
+  margin-bottom: 10px;
+  color: #777;
+}
+
+.empty-links {
+  margin-top: 6px;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #4da6ff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.add-product-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.add-product-form {
+  background: #fff;
+  width: 800px;
+  max-height: 90vh;
+  border-radius: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #222;
+  color: #fff;
+  padding: 10px 15px;
+}
+
+.form-tabs {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  background: #f5f5f5;
+  border: none;
+  cursor: pointer;
+}
+
+.tab.active {
+  background: #fff;
+  border-bottom: 2px solid #007bff;
+}
+
+.form-content {
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-checkboxes {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.checkbox-group input {
+  margin-right: 10px;
+}
+
+.age-restriction {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 15px;
+  border-top: 1px solid #ddd;
+}
+
+.save-final-btn {
+  background: #007bff;
+  color: #fff;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: #ccc;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.add-product-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7); /* darker overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.add-product-form {
+  background: #1e1e1e; /* dark background instead of white */
+  color: #f0f0f0;      /* light text */
+  width: 800px;
+  max-height: 90vh;
+  border-radius: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #333; /* subtle border */
+}
+
+/* HEADER */
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #222;
+  color: #fff;
+  padding: 10px 15px;
+}
+
+/* TABS */
+.form-tabs {
+  display: flex;
+  border-bottom: 1px solid #333;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  background: #2a2a2a;
+  border: none;
+  cursor: pointer;
+  color: #bbb;
+}
+
+.tab.active {
+  background: #1e1e1e;
+  color: #fff;
+  border-bottom: 2px solid #0ea5e9; /* blue underline */
+}
+
+/* CONTENT */
+.form-content {
+  padding: 20px;
+}
+
+/* FORM GROUP */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #ddd;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background: #111;
+  color: #fff;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: #888;
+}
+
+/* CHECKBOXES */
+.form-checkboxes {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  color: #ddd;
+}
+
+.checkbox-group input {
+  margin-right: 10px;
+}
+
+/* AGE RESTRICTION */
+.age-restriction {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* FOOTER */
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 15px;
+  border-top: 1px solid #333;
+  background: #222;
+}
+
+/* BUTTONS */
+.save-final-btn {
+  background: #0ea5e9;
+  color: #fff;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: #555;
+  color: #fff;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background: #777;
+}
+
+.save-final-btn:hover {
+  background: #0284c7;
+}

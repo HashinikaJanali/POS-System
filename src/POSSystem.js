@@ -1,17 +1,19 @@
 import './POSSystem.css';
+import AddProduct from './AddProduct';
 import { MdSettings, MdHistory, MdShoppingCart, MdAttachMoney, MdCreditCard, MdSchedule, MdPerson, MdExitToApp, MdEvent, MdAccessTime } from 'react-icons/md';
 import React, { useState, useRef, useEffect } from 'react';
-import { TagIcon } from "@heroicons/react/24/solid";
+import { TagIcon } from '@heroicons/react/24/solid';
 import Split from 'react-split';
+import Stock from './Stock';
 import {
   Search, User, ArrowRightLeft, Tag, Plus, RotateCcw, Calculator,
   CreditCard, Menu, X, Hash, Star, Scan, Home, ChevronLeft,
   ChevronRight, SkipBack, SkipForward, Lock, LayoutDashboard,
-  FileText, Package, Archive, BarChart3, Users, Heart, Key,
+  FileText, Package, Archive, BarChart3, Users, Heart, Key, Folder,
   Globe, Percent, Building, ArrowLeft, Settings, TrendingUp,
-  Layers,ArrowUpNarrowWide, Briefcase, CheckSquare, LogOut, Volume2, RefreshCw,
-  Clock,MoveDown,MoveUp, CircleQuestionMark, FileSpreadsheet,FolderPlus,FolderMinus, Printer, Save, HelpCircle, Eye,
-  EyeOff, Check,ChartNoAxesCombined, Bell,FolderPen,PlusIcon,Pencil,SaveIcon,HashIcon, MessageSquare, Calendar, Trash2,
+  Layers, ArrowUpNarrowWide, Briefcase, CheckSquare, LogOut, Volume2, RefreshCw,
+  Clock, MoveDown, MoveUp, CircleQuestionMark, FileSpreadsheet, FolderPlus, FolderMinus, Printer, Save, HelpCircle, Eye,
+  EyeOff, Check, ChartNoAxesCombined, Bell, FolderPen, PlusIcon, Pencil, SaveIcon, HashIcon, MessageSquare, Calendar, Trash2,
   HistoryIcon,
   CheckCheckIcon,
   Layers2,
@@ -34,6 +36,7 @@ import { GrSchedule } from 'react-icons/gr';
 import { BiDownload } from 'react-icons/bi';
 import { BsFillCloudDownloadFill } from 'react-icons/bs';
 
+
 const POSApplication = () => {
   const [currentView, setCurrentView] = useState('pos');
   const [searchTerm, setSearchTerm] = useState('');
@@ -43,6 +46,39 @@ const POSApplication = () => {
   const [products, setProducts] = useState([]);
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  const handleSave = () => {
+    if (!newProduct.name.trim()) {
+      alert('Product name is required!');
+      return;
+    }
+    setProducts([...products, newProduct]);
+    setNewProduct({
+      name: '',
+      code: '1',
+      barcode: '',
+      unitOfMeasurement: '',
+      group: 'Products',
+      active: true,
+      defaultQuantity: true,
+      service: false,
+      ageRestriction: '',
+      description: '',
+      salePrice: '',
+      costPrice: '',
+      taxRate: '0',
+      taxIncluded: false,
+      trackStock: true,
+      minimumStock: '0',
+      maximumStock: '',
+      reorderPoint: '0',
+      comments: '',
+      internalNotes: '',
+      productColor: '#ffffff',
+      productImage: null,
+    });
+    setShowAddProduct(false);
+  };
 
   const [newProduct, setNewProduct] = useState({
     name: '',
@@ -66,7 +102,7 @@ const POSApplication = () => {
     comments: '',
     internalNotes: '',
     productColor: '#ffffff',
-    productImage: null
+    productImage: null,
   });
 
   const menuItems = [
@@ -81,7 +117,7 @@ const POSApplication = () => {
     { id: 'payment', label: 'Payment types', icon: CreditCard },
     { id: 'countries', label: 'Countries', icon: Globe },
     { id: 'tax', label: 'Tax rates', icon: Percent },
-    { id: 'company', label: 'My company', icon: Building }
+    { id: 'company', label: 'My company', icon: Building },
   ];
 
   const adminMenuItems = [
@@ -90,7 +126,7 @@ const POSApplication = () => {
     { id: 'open-sales', label: 'View open sales', icon: Layers3 },
     { id: 'cash-in-out', label: 'Cash In / Out', icon: BsFillCloudDownloadFill },
     { id: 'credit-payments', label: 'Credit payments', icon: CreditCard },
-    { id: 'end-of-day', label: 'End of day', icon: GrSchedule }
+    { id: 'end-of-day', label: 'End of day', icon: GrSchedule },
   ];
 
   const POSSystem = () => (
@@ -123,18 +159,17 @@ const POSApplication = () => {
       <Split className="main-content" sizes={[30, 70]} minSize={100} expandToMin={false} gutterSize={10} gutterAlign="center" direction="horizontal">
         <div className="left-panel">
           <div className="cart-controls">
-  <button className="delete-btn"><X size={14} />Delete</button>
-  <div className="quantity-control">
-    
-    <input
-      type="text"
-      value={quantity}
-      onChange={(e) => setQuantity(e.target.value)}
-      className="quantity-input"
-      placeholder="Quantity"
-    />
-  </div>
-</div>
+            <button className="delete-btn"><X size={14} />Delete</button>
+            <div className="quantity-control">
+              <input
+                type="text"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                className="quantity-input"
+                placeholder="Quantity"
+              />
+            </div>
+          </div>
           <div className="items-area">
             <div className="no-items">No items</div>
           </div>
@@ -144,7 +179,6 @@ const POSApplication = () => {
             <div className="total-divider"></div>
             <div className="total-line total-main"><span>Total</span><span>0.00</span></div>
           </div>
-          
           <div className="action-buttons">
             <button className="action-button void-button">
               <Trash2 size={14} color="white" />Void order
@@ -187,47 +221,45 @@ const POSApplication = () => {
 
   const ManagementDashboard = () => {
     const renderSidebar = () => (
-  <div className={`management-sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}
->
-    {/* Header */}
-    <div className="sidebar-header">
-      <button onClick={() => setCurrentView('pos')} className="back-btn">
-        <ArrowLeft size={20} />
-      </button>
-      {!sidebarCollapsed && (
-        <span>
-          Management • {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
-        </span>
-      )}
-    </div>
+      <div className={`management-sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
+        {/* Header */}
+        <div className="sidebar-header">
+          <button onClick={() => setCurrentView('pos')} className="back-btn">
+            <ArrowLeft size={20} />
+          </button>
+          {!sidebarCollapsed && (
+            <span>
+              Management • {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
+            </span>
+          )}
+        </div>
 
-    {/* Navigation */}
-    <nav className="sidebar-nav">
-      {menuItems.map((item) => (
-        <button
-          key={item.id}
-          className={`nav-item ${activeSection === item.id ? 'active' : ''}`}
+        {/* Navigation */}
+        <nav className="sidebar-nav">
+          {menuItems.map((item) => (
+            <button
+              key={item.id}
+              className={`nav-item ${activeSection === item.id ? 'active' : ''}`}
+              onClick={() => setActiveSection(item.id)}
+              title={sidebarCollapsed ? item.label : ''}
+            >
+              <item.icon size={20} />
+              {!sidebarCollapsed && <span>{item.label}</span>}
+            </button>
+          ))}
+        </nav>
 
-          onClick={() => setActiveSection(item.id)}
-          title={sidebarCollapsed ? item.label : ''}
-        >
-          <item.icon size={20} />
-          {!sidebarCollapsed && <span>{item.label}</span>}
-        </button>
-      ))}
-    </nav>
-
-    {/* Collapse button at bottom */}
-    <div className="sidebar-footer">
-      <button
-        onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-        className="collapse-btn"
-      >
-        {sidebarCollapsed ? '»' : '«'}
-      </button>
-    </div>
-  </div>
-);
+        {/* Collapse button at bottom */}
+        <div className="sidebar-footer">
+          <button
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className="collapse-btn"
+          >
+            {sidebarCollapsed ? '»' : '«'}
+          </button>
+        </div>
+      </div>
+    );
 
     const renderDashboard = () => (
       <div className="dashboard-content">
@@ -274,125 +306,93 @@ const POSApplication = () => {
       </div>
     );
 
-    const renderStock = () => (
-      <div className="stock-content">
-        <div className="stock-header">
-          <div className="breadcrumb"><ArrowLeft size={16} /><span>Management • Stock</span></div>
-          <button className="close-btn" onClick={() => setCurrentView('pos')}><X size={16} /></button>
-        </div>
-        <div className="stock-toolbar">
-          <div className="toolbar-left">
-            <button className={`toolbar-btn ${activeSection === 'dashboard' ? 'active' : ''}`} onClick={() => setActiveSection('dashboard')}><LayoutDashboard size={16} />Dashboard</button>
-            <button className={`toolbar-btn ${activeSection === 'documents' ? 'active' : ''}`} onClick={() => setActiveSection('documents')}><FileText size={16} />Documents</button>
-            <button className={`toolbar-btn ${activeSection === 'products' ? 'active' : ''}`} onClick={() => setActiveSection('products')}><Package size={16} />Products</button>
-            <button className={`toolbar-btn ${activeSection === 'stock' ? 'active' : ''}`}><Archive size={16} />Stock</button>
-          </div>
-          <div className="toolbar-right">
-            <button className="icon-btn" title="Refresh"><RefreshCw size={16} /></button>
-            <button className="icon-btn" title="Stock History"><Clock size={16} /></button>
-            <button className="icon-btn" title="Print"><Printer size={16} /></button>
-            <button className="icon-btn" title="Save as PDF"><Save size={16} /></button>
-            <button className="icon-btn" title="Excel"><FileSpreadsheet size={16} /></button>
-            <button className="icon-btn" title="Inventory Count Report"><BarChart3 size={16} /></button>
-            <button className="icon-btn" title="Quick Inventory"><Search size={16} /></button>
-            <button className="icon-btn" title="Help"><HelpCircle size={16} /></button>
-          </div>
-        </div>
-        <div className="stock-filters">
-          <button className="filter-btn active">Products</button>
-          <div className="quantity-filters">
-            <label className="quantity-filter"><input type="checkbox" /><span>Negative quantity</span><span className="count red">0</span></label>
-            <label className="quantity-filter"><input type="checkbox" /><span>Non zero quantity</span><span className="count blue">0</span></label>
-            <label className="quantity-filter"><input type="checkbox" /><span>Zero quantity</span><span className="count green">0</span></label>
-          </div>
-          <div className="products-count">Products count: 0</div>
-        </div>
-        <div className="stock-search">
-          <div className="search-tools">
-            <button className="search-tool">⭐</button>
-            <button className="search-tool">|||</button>
-            <button className="search-tool">#</button>
-            <button className="search-tool">🏷️</button>
-            <input type="text" placeholder="Product name" className="product-search" />
-          </div>
-        </div>
-        <div className="stock-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Code</th>
-                <th>Name</th>
-                <th>Quantity</th>
-                <th>Unit o...</th>
-                <th>Cost p...</th>
-                <th>Cost</th>
-                <th>Cost incl...</th>
-                <th>Value</th>
-                <th>Value incl...</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colSpan="9" className="empty-stock">No stock data available</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div className="stock-summary">
-          <div className="summary-section">
-            <h4>Cost price</h4>
-            <div>Total cost: 0.00</div>
-            <div>Total cost inc. tax: 0.00</div>
-          </div>
-          <div className="summary-section">
-            <h4>Sale price</h4>
-            <div>Total: 0.00</div>
-            <div>Total inc. tax: 0.00</div>
-          </div>
-        </div>
-      </div>
-    );
-
     const renderProducts = () => (
-      <div className="products-content">
+      <div className="products-page">
+        {/* Toolbar */}
         <div className="products-toolbar">
-          <button className="toolbar-btn active">Products</button>
-          <div className="search-tools">
-            <button className="search-tool">⭐</button>
-            <button className="search-tool">|||</button>
-            <button className="search-tool">#</button>
-            <button className="search-tool">🏷️</button>
-            <input type="text" placeholder="Product name" className="product-search" />
+          {/* First row */}
+          <div className="toolbar-row">
+            <button className="toolbar-btn"><RefreshCw size={16} /> Refresh</button>
+            <button className="toolbar-btn"><FolderPlus size={16} /> New group</button>
+            <button className="toolbar-btn"><FolderPen size={16} /> Edit group</button>
+            <button className="toolbar-btn"><FolderMinus size={16} /> Delete group</button>
+            <button className="toolbar-btn"><Plus size={16} /> New product</button>
+            <button className="toolbar-btn"><Pencil size={16} /> Edit product</button>
+            <button className="toolbar-btn"><Trash2 size={16} /> Delete product</button>
+            <button className="toolbar-btn"><Printer size={16} /> Print</button>
+            <button className="toolbar-btn"><Save size={16} /> Save as PDF</button>
+            <button className="toolbar-btn"><FileSpreadsheet size={16} /> Excel</button>
+            <button className="toolbar-btn"><Tag size={16} /> Price tags</button>
+            <button className="toolbar-btn"><ArrowUpNarrowWide size={16} /> Sorting</button>
+            <button className="toolbar-btn"><TrendingUp size={16} /> Mov. avg. price</button>
           </div>
-          <div className="products-count">Products count: {products.length}</div>
+
+          {/* Second row */}
+          <div className="toolbar-row">
+            <button className="toolbar-btn"><DownloadCloudIcon size={16} /> Import</button>
+            <button className="toolbar-btn"><BiDownload size={16} /> Export</button>
+            <button className="toolbar-btn"><HelpCircle size={16} /> Help</button>
+          </div>
         </div>
-        {products.length === 0 ? (
-          <div className="empty-products">
-            <div className="empty-icon"><EyeOff size={48} /></div>
-            <h3>Selected group contains no products</h3>
-            <div className="empty-actions">
-              <button className="add-product-btn" onClick={() => setShowAddProduct(true)}>Add new product</button>
-              <span> or </span>
-              <button className="add-group-btn">new product group</button>
+
+        {/* Split layout */}
+        <div className="products-body">
+          <Split
+            className="products-split"
+            sizes={[25, 75]}
+            minSize={150}
+            gutterSize={8}
+            direction="horizontal"
+          >
+            {/* Left panel */}
+            <div className="products-left">
+              <div className="group-item active">📂 Products</div>
             </div>
-          </div>
-        ) : (
-          <div className="products-list">
-            {products.map((product, index) => (
-              <div key={index} className="product-item">
-                <div className="product-info">
-                  <h4>{product.name}</h4>
-                  <p>Code: {product.code}</p>
-                  <p>Group: {product.group}</p>
-                </div>
-                <div className="product-actions">
-                  <button className="edit-btn">Edit</button>
-                  <button className="delete-btn"><Trash2 size={14} /></button>
-                </div>
+
+            {/* Right panel */}
+            <div className="products-right">
+              {/* Search bar */}
+              <div className="products-search">
+                <button className="search-tool">✱</button>
+                <button className="search-tool">|||</button>
+                <button className="search-tool">#</button>
+                <button className="search-tool">🏷️</button>
+                <input
+                  type="text"
+                  placeholder="Product name"
+                  className="product-search-input"
+                />
+                <div className="products-count">Products count: {products.length}</div>
               </div>
-            ))}
-          </div>
-        )}
+
+              {/* Empty state */}
+              {products.length === 0 ? (
+                <div className="products-empty">
+                  <EyeOff size={64} className="empty-icon" />
+                  <p>Selected group contains no products</p>
+                  <div className="empty-links">
+                    <button
+                      className="link-btn"
+                      onClick={() => setShowAddProduct(true)}
+                    >
+                      Add new product
+                    </button>
+                    <span> or </span>
+                    <button className="link-btn">new product group</button>
+                  </div>
+                </div>
+              ) : (
+                <div className="products-list">
+                  {products.map((p, i) => (
+                    <div key={i} className="product-item">
+                      {p.name}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </Split>
+        </div>
       </div>
     );
 
@@ -443,7 +443,7 @@ const POSApplication = () => {
         case 'dashboard': return renderDashboard();
         case 'documents': return renderDocuments();
         case 'products': return renderProducts();
-        case 'stock': return renderStock();
+        case 'stock': return <Stock searchTerm={searchTerm} setSearchTerm={setSearchTerm} />;
         case 'customers': return renderCustomers();
         case 'reporting': return renderReporting();
         case 'promotions': return (
@@ -472,162 +472,72 @@ const POSApplication = () => {
   };
 
   const AdminMenuOverlay = () => {
-  const menuRef = useRef(null);
+    const menuRef = useRef(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setShowAdminMenu(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  return (
-    showAdminMenu && (
-      <div className="admin-overlay">
-        <div className="admin-menu" ref={menuRef}>
-          {/* Header */}
-          <div className="admin-header">
-            <h3>POS - Admin</h3>
-            <button className="close-btn" onClick={() => setShowAdminMenu(false)}>
-  <ArrowRight size={16} />
-</button>
-          </div>
-
-          {/* Menu Items */}
-          <ul className="admin-list">
-            {adminMenuItems.map((item) => (
-              <li
-                key={item.id}
-                onClick={() => {
-                  if (item.action) item.action();
-                  setShowAdminMenu(false);
-                }}
-              >
-                <item.icon className="admin-icon" />
-                <span>{item.label}</span>
-              </li>
-            ))}
-          </ul>
-
-          {/* User Section */}
-          <div className="admin-user">
-            <h4>User</h4>
-            <button onClick={() => setShowAdminMenu(false)}>
-              <User className="admin-icon" /> User info
-            </button>
-            <button onClick={() => setShowAdminMenu(false)}>
-              <LogOut className="admin-icon" /> Sign out
-            </button>
-            <button onClick={() => setShowAdminMenu(false)}>
-              <MessageSquare className="admin-icon" /> Feedback
-            </button>
-          </div>
-
-          {/* Date */}
-          <div className="admin-date">{new Date().toLocaleDateString()}</div>
-
-          {/* Bottom Controls */}
-          <div className="admin-footer">
-            <Settings className="admin-icon" />
-            <Expand className="admin-icon" />
-            <Power className="admin-icon" />
-          </div>
-        </div>
-      </div>
-    )
-  );
-};
-
-
-  const AddProductForm = () => {
-    const handleSave = () => {
-      if (newProduct.name.trim()) {
-        setProducts([...products, { ...newProduct, id: Date.now() }]);
-        setNewProduct({
-          name: '', code: (products.length + 2).toString(), barcode: '', unitOfMeasurement: '', group: 'Products', active: true, defaultQuantity: true, service: false, ageRestriction: '', description: ''
-        });
-        setShowAddProduct(false);
-      }
-    };
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (menuRef.current && !menuRef.current.contains(event.target)) {
+          setShowAdminMenu(false);
+        }
+      };
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     return (
-      <div className="add-product-overlay" onClick={() => setShowAddProduct(false)}>
-        <div className="add-product-form" onClick={e => e.stopPropagation()}>
-          <div className="form-header">
-            <button className="save-btn" onClick={handleSave}>Save</button>
-            <h2>New product</h2>
-            <button className="form-close" onClick={() => setShowAddProduct(false)}>&#8594;</button>
-          </div>
-          <div className="form-tabs">
-            <button className="tab active">Details</button>
-            <button className="tab">Price & tax</button>
-            <button className="tab">Stock control</button>
-            <button className="tab">Comments</button>
-            <button className="tab">Image & color</button>
-          </div>
-          <div className="form-content">
-            <div className="form-group">
-              <label>Name *</label>
-              <input type="text" value={newProduct.name} onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })} className={`form-input ${!newProduct.name.trim() ? 'name-required' : ''}`} placeholder="Enter product name" />
+      showAdminMenu && (
+        <div className="admin-overlay">
+          <div className="admin-menu" ref={menuRef}>
+            {/* Header */}
+            <div className="admin-header">
+              <h3>POS - Admin</h3>
+              <button className="close-btn" onClick={() => setShowAdminMenu(false)}>
+                <ArrowRight size={16} />
+              </button>
             </div>
-            <div className="form-group">
-              <label>Code</label>
-              <input type="text" value={newProduct.code} onChange={(e) => setNewProduct({ ...newProduct, code: e.target.value })} className="form-input" />
+
+            {/* Menu Items */}
+            <ul className="admin-list">
+              {adminMenuItems.map((item) => (
+                <li
+                  key={item.id}
+                  onClick={() => {
+                    if (item.action) item.action();
+                    setShowAdminMenu(false);
+                  }}
+                >
+                  <item.icon className="admin-icon" />
+                  <span>{item.label}</span>
+                </li>
+              ))}
+            </ul>
+
+            {/* User Section */}
+            <div className="admin-user">
+              <h4>User</h4>
+              <button onClick={() => setShowAdminMenu(false)}>
+                <User className="admin-icon" /> User info
+              </button>
+              <button onClick={() => setShowAdminMenu(false)}>
+                <LogOut className="admin-icon" /> Sign out
+              </button>
+              <button onClick={() => setShowAdminMenu(false)}>
+                <MessageSquare className="admin-icon" /> Feedback
+              </button>
             </div>
-            <div className="form-group">
-              <label>Barcode</label>
-              <input type="text" value={newProduct.barcode} onChange={(e) => setNewProduct({ ...newProduct, barcode: e.target.value })} className="form-input" placeholder="Scan or enter barcode" />
-              <button className="generate-barcode">Generate barcode</button>
+
+            {/* Date */}
+            <div className="admin-date">{new Date().toLocaleDateString()}</div>
+
+            {/* Bottom Controls */}
+            <div className="admin-footer">
+              <Settings className="admin-icon" />
+              <Expand className="admin-icon" />
+              <Power className="admin-icon" />
             </div>
-            <div className="form-group">
-              <label>Unit of measurement</label>
-              <input type="text" value={newProduct.unitOfMeasurement} onChange={(e) => setNewProduct({ ...newProduct, unitOfMeasurement: e.target.value })} className="form-input" placeholder="e.g., pcs, kg, liter" />
-            </div>
-            <div className="form-group">
-              <label>Group</label>
-              <select value={newProduct.group} onChange={(e) => setNewProduct({ ...newProduct, group: e.target.value })} className="form-select">
-                <option>Products</option>
-                <option>Electronics</option>
-                <option>Clothing</option>
-                <option>Food & Beverages</option>
-                <option>Home & Garden</option>
-              </select>
-            </div>
-            <div className="form-checkboxes">
-              <label className="checkbox-group">
-                <input type="checkbox" checked={newProduct.active} onChange={(e) => setNewProduct({ ...newProduct, active: e.target.checked })} />
-                <span className={`checkmark ${newProduct.active ? 'active' : ''}`}></span><span>Active</span>
-              </label>
-              <label className="checkbox-group">
-                <input type="checkbox" checked={newProduct.defaultQuantity} onChange={(e) => setNewProduct({ ...newProduct, defaultQuantity: e.target.checked })} />
-                <span className={`checkmark ${newProduct.defaultQuantity ? 'active' : ''}`}></span><span>Default quantity</span>
-              </label>
-              <label className="checkbox-group">
-                <input type="checkbox" checked={newProduct.service} onChange={(e) => setNewProduct({ ...newProduct, service: e.target.checked })} />
-                <span className={`checkmark ${newProduct.service ? 'active' : ''}`}></span><span>Service (not using stock)</span>
-              </label>
-            </div>
-            <div className="form-group">
-              <label>Age restriction</label>
-              <div className="age-restriction">
-                <input type="number" value={newProduct.ageRestriction} onChange={(e) => setNewProduct({ ...newProduct, ageRestriction: e.target.value })} className="form-input age-input" placeholder="0" />
-                <span>year(s)</span>
-              </div>
-            </div>
-            <div className="form-group">
-              <label>Description</label>
-              <textarea value={newProduct.description} onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })} className="form-textarea" placeholder="Enter product description..." />
-            </div>
-          </div>
-          <div className="form-footer">
-            <button className="save-final-btn" onClick={handleSave}><Check size={16} />Save</button>
-            <button className="cancel-btn" onClick={() => setShowAddProduct(false)}><X size={16} />Cancel</button>
           </div>
         </div>
-      </div>
+      )
     );
   };
 
@@ -636,7 +546,14 @@ const POSApplication = () => {
       {currentView === 'pos' && <POSSystem />}
       {currentView === 'management' && <ManagementDashboard />}
       {showAdminMenu && <AdminMenuOverlay />}
-      {showAddProduct && <AddProductForm />}
+      {showAddProduct && (
+        <AddProduct
+          newProduct={newProduct}
+          setNewProduct={setNewProduct}
+          onSave={handleSave}
+          onCancel={() => setShowAddProduct(false)}
+        />
+      )}
     </div>
   );
 };

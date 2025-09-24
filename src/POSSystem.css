@@ -2088,7 +2088,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #333;
+  color: #dfdada;
   margin-right: 10px;
 }
 
@@ -2297,4 +2297,31 @@
   padding: 8px;
   border-top: 1px solid #333;
   text-align: center;
+}
+
+.products-body {
+  height: calc(100vh - 120px); /* adjust based on your header/toolbar height */
+  display: flex;
+  flex-direction: column;
+}
+
+.products-split {
+  display: flex;
+  flex: 1;
+}
+
+.products-left,
+.products-right {
+  padding: 10px;
+  overflow: auto; /* allow scrolling inside panels */
+}
+
+.gutter {
+  background-color: #6e6b6b;
+  cursor: col-resize;
+  transition: background-color 0.2s ease;
+}
+
+.gutter:hover {
+  background-color: #bbb;
 }
