@@ -106,65 +106,10 @@
   background-color: #1a1a1a;
 }
 
-/* Cart Controls */
-.cart-controls {
-  padding: 12px;
-  border-bottom: 1px solid #3d3d3d;
-  display: flex;
-  align-items: center;
-  gap: 12px; /* Consistent spacing between delete button and quantity control */
-  background-color: #2b2b2b;
-}
-
-.delete-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  background-color: #625c5d;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 12px;
-  white-space: nowrap;
-  min-width: 80px;
-}
-
-.delete-btn:hover {
-  background-color: #ff0303;
-}
-
-.quantity-control {
-  display: flex;
-  flex-direction: row; /* Ensure horizontal alignment */
-  align-items: center;
-  gap: 8px; /* Space between label and input */
-  flex: 1; /* Allow it to take remaining space */
-}
-
-.quantity-control span {
-  font-size: 12px;
-  color: #999999;
-  white-space: nowrap; /* Prevent wrapping */
-}
-
-.quantity-input {
-  padding: 8px 12px; /* Increased padding for a larger box */
-  width: 80px; /* Increased width for a larger box */
-  background-color: #3a3a3a;
-  border: 1px solid #4b4b4b;
-  border-radius: 4px;
-  color: white;
-  font-size: 14px;
-  text-align: center;
-}
-
 .quantity-input:focus {
   outline: none;
   border-color: #ff3366;
 }
-
 /* Items Area */
 .items-area {
   flex: 1;
@@ -247,8 +192,8 @@
 /* Search Bar */
 .search-bar {
   background-color: #2b2b2b;
-  border-bottom: 1px solid #3d3d3d;
-  padding: 16px;
+  border-bottom: 2px solid #3d3d3d;
+  padding: 6.5px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -2471,4 +2416,106 @@
 
 .main-content .gutter:hover::before {
   color: #ffffff; /* White dots on hover for better contrast */
+}
+
+.products-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1e1e1e; /* dark grey like screenshot */
+  border-top: 1px solid #333;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: #ccc;
+}
+
+.footer-left {
+  font-size: 13px;
+  color: #ccc;
+}
+
+.footer-right {
+  display: flex;
+  gap: 6px;
+}
+
+.footer-btn {
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.footer-btn:hover {
+  background: #333;
+  color: #fff;
+}
+
+/* Cart Controls */
+.cart-controls {
+  padding: 1px;
+  border-bottom: 1px solid #3d3d3d;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #2b2b2b;
+  justify-content: center; /* Center the content horizontally */
+}
+
+.delete-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 20px; /* Increased padding for larger size */
+  background-color: #625c5d;
+  color: white;
+  border: none;
+  border-radius: 6px; /* Slightly larger radius for better look */
+  cursor: pointer;
+  font-size: 14px; /* Slightly larger font */
+  white-space: nowrap;
+  min-width: 120px; /* Increased width */
+  height: 40px; /* Increased height */
+}
+
+.delete-btn:hover {
+  background-color: #ff0303;
+}
+
+.quantity-control {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px; /* Increased gap for better spacing */
+  min-width: 150px; /* Increased width */
+  height: 50px; /* Increased height */
+}
+
+.quantity-control span {
+  font-size: 14px; /* Slightly larger font */
+  color: white;
+  white-space: nowrap;
+}
+
+.quantity-input {
+  padding: 12px 16px; /* Increased padding for larger box */
+  width: 100px; /* Increased width */
+  background-color: #625c5d;
+  border: 1px solid #4b4b4b;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  text-align: center;
+  height: 40px; /* Increased height */
+}
+
+.quantity-input:focus {
+  outline: none;
+  border-color: #ff3366;
+}
+.quantity-input::placeholder {
+  color: #bbbaba; /* Set placeholder text "quantity" to white */
 }

@@ -6,9 +6,9 @@ import { TagIcon } from '@heroicons/react/24/solid';
 import Split from 'react-split';
 import Stock from './Stock';
 import {
-  Search, User, ArrowRightLeft, Tag, Plus, RotateCcw, Calculator,
+  Search, User,House, ArrowRightLeft, Tag, Plus, RotateCcw, Calculator,
   CreditCard, Menu, X, Hash, Star, Scan, Home, ChevronLeft,
-  ChevronRight, SkipBack, SkipForward, Lock, LayoutDashboard,
+  ChevronRight,ChevronFirst,ChevronLast, SkipBack, SkipForward, Lock, LayoutDashboard,
   FileText, Package, Archive, BarChart3, Users, Heart, Key, Folder,
   Globe, Percent, Building, ArrowLeft, Settings, TrendingUp,
   Layers, ArrowUpNarrowWide, Briefcase, CheckSquare, LogOut, Volume2, RefreshCw,
@@ -214,6 +214,15 @@ const POSApplication = () => {
               <p className="empty-desc" style={{ color: '#ff0000' }}>Please, add products or set sale price to existing ones to continue</p>
             </div>
           </div>
+          <div className="products-footer">
+    <div className="footer-left">Page 1 / 0</div>
+    <div className="footer-right">
+      <button className="footer-btn"><Home size={16} /></button>
+      <button className="footer-btn"><ChevronLeft size={16} /></button>
+      <button className="footer-btn"><ChevronRight size={16} /></button>
+      <button className="footer-btn"><ChevronLast size={16} /></button>
+    </div>
+  </div>
         </div>
       </Split>
     </div>
