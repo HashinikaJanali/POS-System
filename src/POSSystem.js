@@ -6,9 +6,9 @@ import { TagIcon } from '@heroicons/react/24/solid';
 import Split from 'react-split';
 import Stock from './Stock';
 import {
-  Search, User,House, ArrowRightLeft, Tag, Plus, RotateCcw, Calculator,
+  Search, User, House, ArrowRightLeft, Tag, Plus, RotateCcw, Calculator,
   CreditCard, Menu, X, Hash, Star, Scan, Home, ChevronLeft,
-  ChevronRight,ChevronFirst,ChevronLast, SkipBack, SkipForward, Lock, LayoutDashboard,
+  ChevronRight, ChevronFirst, ChevronLast, SkipBack, SkipForward, Lock, LayoutDashboard,
   FileText, Package, Archive, BarChart3, Users, Heart, Key, Folder,
   Globe, Percent, Building, ArrowLeft, Settings, TrendingUp,
   Layers, ArrowUpNarrowWide, Briefcase, CheckSquare, LogOut, Volume2, RefreshCw,
@@ -43,16 +43,73 @@ const POSApplication = () => {
   const [quantity, setQuantity] = useState('');
   const [activeSection, setActiveSection] = useState('dashboard');
   const [showAdminMenu, setShowAdminMenu] = useState(false);
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([
+    { id: 1, name: 'Product A', price: 100.00, code: '#1 2305' },
+    { id: 2, name: 'Product B', price: 200.00, code: '#1 2305' },
+    { id: 3, name: 'Product C', price: 200.00, code: '#2 2305' },
+    { id: 4, name: 'Product D', price: 200.00, code: '#2 2305' }
+  ]);
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [cartItems, setCartItems] = useState([
+    { id: 1, name: 'Product A', price: 100.00, quantity: 2, code: '#1 2305' },
+    { id: 2, name: 'Product B', price: 200.00, quantity: 1, code: '#1 2305' },
+    { id: 3, name: 'Product C', price: 200.00, quantity: 3, code: '#2 2305' },
+    { id: 4, name: 'Product D', price: 200.00, quantity: 1, code: '#2 2305', deleted: true }
+  ]);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [currentQuantity, setCurrentQuantity] = useState('');
+
+  // Calculate cart totals
+  const calculateTotals = () => {
+    const activeItems = cartItems.filter(item => !item.deleted);
+    const subtotal = activeItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const tax = subtotal * 0.15; // 15% tax
+    const total = subtotal + tax;
+    return { subtotal, tax, total };
+  };
+
+  const handleProductClick = (product) => {
+    const existingItem = cartItems.find(item => item.id === product.id && !item.deleted);
+    if (existingItem) {
+      setCartItems(cartItems.map(item =>
+        item.id === product.id && !item.deleted
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      ));
+    } else {
+      setCartItems([...cartItems, { ...product, quantity: 1 }]);
+    }
+  };
+
+  const handleDeleteItem = (itemId) => {
+    setCartItems(cartItems.map(item =>
+      item.id === itemId ? { ...item, deleted: true } : item
+    ));
+    setSelectedItem(null);
+  };
+
+  const handleQuantityChange = (itemId, newQuantity) => {
+    if (newQuantity === '' || newQuantity === '0') {
+      handleDeleteItem(itemId);
+      return;
+    }
+    setCartItems(cartItems.map(item =>
+      item.id === itemId ? { ...item, quantity: parseInt(newQuantity) || 1 } : item
+    ));
+  };
 
   const handleSave = () => {
     if (!newProduct.name.trim()) {
       alert('Product name is required!');
       return;
     }
-    setProducts([...products, newProduct]);
+    const newId = Math.max(...products.map(p => p.id), 0) + 1;
+    setProducts([...products, {
+      ...newProduct,
+      id: newId,
+      price: parseFloat(newProduct.salePrice) || 0
+    }]);
     setNewProduct({
       name: '',
       code: '1',
@@ -159,32 +216,90 @@ const POSApplication = () => {
       <Split className="main-content" sizes={[30, 70]} minSize={100} expandToMin={false} gutterSize={10} gutterAlign="center" direction="horizontal">
         <div className="left-panel">
           <div className="cart-controls">
-            <button className="delete-btn"><X size={14} />Delete</button>
+            <button
+              className="delete-btn"
+              onClick={() => selectedItem && handleDeleteItem(selectedItem.id)}
+            >
+              <X size={14} />Delete
+            </button>
             <div className="quantity-control">
+              <span>Quantity</span>
               <input
                 type="text"
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
+                value={selectedItem ? selectedItem.quantity : currentQuantity}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (selectedItem) {
+                    handleQuantityChange(selectedItem.id, value);
+                  } else {
+                    setCurrentQuantity(value);
+                  }
+                }}
                 className="quantity-input"
-                placeholder="Quantity"
+                placeholder="1174"
               />
             </div>
           </div>
           <div className="items-area">
-            <div className="no-items">No items</div>
+            {cartItems.length === 0 ? (
+              <div className="no-items">No items</div>
+            ) : (
+              cartItems.map((item) => (
+                <div
+                  key={`${item.id}-${item.deleted ? 'deleted' : 'active'}`}
+                  className={`cart-item ${item.deleted ? 'deleted' : ''} ${selectedItem?.id === item.id && !item.deleted ? 'selected' : ''}`}
+                  onClick={() => !item.deleted && setSelectedItem(item)}
+                >
+                  <div className="item-status">
+                    {item.deleted ? (
+                      <div className="delete-indicator">-</div>
+                    ) : (
+                      <div className="add-indicator">+</div>
+                    )}
+                  </div>
+                  <div className="item-info">
+                    <div className="item-header">
+                      <span className="item-name">{item.name}</span>
+                      <span className="item-quantity">{item.quantity}</span>
+                    </div>
+                    <div className="item-details">
+                      <span className="item-code">{item.code}</span>
+                      <span className="item-total">
+                        {item.deleted ? (
+                          <span style={{ textDecoration: 'line-through', color: '#ff6b6b' }}>
+                            {(item.price * item.quantity).toFixed(2)}
+                          </span>
+                        ) : (
+                          (item.price * item.quantity).toFixed(2)
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
           <div className="totals-section">
-            <div className="total-line"><span>Subtotal</span><span>0.00</span></div>
-            <div className="total-line"><span>Tax</span><span>0.00</span></div>
+            <div className="total-line">
+              <span>Subtotal</span>
+              <span>{calculateTotals().subtotal.toFixed(2)}</span>
+            </div>
+            <div className="total-line">
+              <span>Tax</span>
+              <span>{calculateTotals().tax.toFixed(2)}</span>
+            </div>
             <div className="total-divider"></div>
-            <div className="total-line total-main"><span>Total</span><span>0.00</span></div>
+            <div className="total-line total-main">
+              <span>Total</span>
+              <span>{calculateTotals().total.toFixed(2)}</span>
+            </div>
           </div>
           <div className="action-buttons">
             <button className="action-button void-button">
               <Trash2 size={14} color="white" />Void order
             </button>
             <button className="action-button lock-button"><Lock size={14} />Lock</button>
-            <button className="action-button repeat-button"><Repeat size={14} />Repeat order</button>
+            <button className="action-button repeat-button"><Repeat size={14} />Repeat rou...</button>
           </div>
         </div>
         <div className="right-panel">
@@ -208,21 +323,36 @@ const POSApplication = () => {
             <button className="search-tool"><Keyboard size={16} /></button>
           </div>
           <div className="products-area">
-            <div className="empty-products">
-              <TagIcon style={{ width: '48px', height: '48px', color: 'red' }} />
-              <h2 className="empty-title" style={{ color: '#ff0000' }}>No products available</h2>
-              <p className="empty-desc" style={{ color: '#ff0000' }}>Please, add products or set sale price to existing ones to continue</p>
-            </div>
+            {products.length === 0 ? (
+              <div className="empty-products">
+                <TagIcon style={{ width: '48px', height: '48px', color: 'red' }} />
+                <h2 className="empty-title" style={{ color: '#ff0000' }}>No products available</h2>
+                <p className="empty-desc" style={{ color: '#ff0000' }}>Please, add products or set sale price to existing ones to continue</p>
+              </div>
+            ) : (
+              <div className="products-grid">
+                {products.map((product) => (
+                  <div
+                    key={product.id}
+                    className="product-card"
+                    onClick={() => handleProductClick(product)}
+                  >
+                    <div className="product-name">{product.name}</div>
+                    <div className="product-price">{product.price.toFixed(2)}</div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           <div className="products-footer">
-    <div className="footer-left">Page 1 / 0</div>
-    <div className="footer-right">
-      <button className="footer-btn"><Home size={16} /></button>
-      <button className="footer-btn"><ChevronLeft size={16} /></button>
-      <button className="footer-btn"><ChevronRight size={16} /></button>
-      <button className="footer-btn"><ChevronLast size={16} /></button>
-    </div>
-  </div>
+            <div className="footer-left">Page 1 / 1</div>
+            <div className="footer-right">
+              <button className="footer-btn"><Home size={16} /></button>
+              <button className="footer-btn"><ChevronLeft size={16} /></button>
+              <button className="footer-btn"><ChevronRight size={16} /></button>
+              <button className="footer-btn"><ChevronLast size={16} /></button>
+            </div>
+          </div>
         </div>
       </Split>
     </div>
@@ -325,7 +455,12 @@ const POSApplication = () => {
             <button className="toolbar-btn"><FolderPlus size={16} /> New group</button>
             <button className="toolbar-btn"><FolderPen size={16} /> Edit group</button>
             <button className="toolbar-btn"><FolderMinus size={16} /> Delete group</button>
-            <button className="toolbar-btn"><Plus size={16} /> New product</button>
+            <button
+              className="toolbar-btn"
+              onClick={() => setShowAddProduct(true)} // Trigger AddProduct form
+            >
+              <Plus size={16} /> New product
+            </button>
             <button className="toolbar-btn"><Pencil size={16} /> Edit product</button>
             <button className="toolbar-btn"><Trash2 size={16} /> Delete product</button>
             <button className="toolbar-btn"><Printer size={16} /> Print</button>
